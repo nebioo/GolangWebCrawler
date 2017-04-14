@@ -1,0 +1,23 @@
+<component name="libraryTable">
+  <library name="GOPATH &lt;GolangWebCrawler&gt;">
+    <CLASSES>
+      <root url="file://C:/ActiveGo/gopath/src/github.com" />
+      <root url="file://C:/ActiveGo/gopath/src/golang.org" />
+      <root url="file://C:/ActiveGo/gopath/src/google.golang.org" />
+      <root url="file://C:/ActiveGo/gopath/src/sourcegraph.com" />
+      <root url="file://C:/ActiveGo/gopath/src/cloud.google.com" />
+      <root url="file://C:/ActiveGo/gopath/src/gopkg.in" />
+    </CLASSES>
+    <SOURCES>
+      <root url="file://C:/ActiveGo/gopath/src/github.com" />
+      <root url="file://C:/ActiveGo/gopath/src/golang.org" />
+      <root url="file://C:/ActiveGo/gopath/src/google.golang.org" />
+      <root url="file://C:/ActiveGo/gopath/src/sourcegraph.com" />
+      <root url="file://C:/ActiveGo/gopath/src/cloud.google.com" />
+      <root url="file://C:/ActiveGo/gopath/src/gopkg.in" />
+    </SOURCES>
+    <excluded>
+      <root url="file://$PROJECT_DIR$" />
+    </excluded>
+  </library>
+</component>
