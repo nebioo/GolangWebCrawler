@@ -8,7 +8,7 @@ import (
 	"golang.org/x/net/html/atom"
 	"strings"
 	log "github.com/llimllib/loglevel"
-	"golang.org/x/text/unicode/rangetable"
+	//"golang.org/x/text/unicode/rangetable"
 )
 
 var MaxDepth = 2
