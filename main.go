@@ -11,7 +11,9 @@ import (
 	"golang.org/x/text/unicode/rangetable"
 )
 
-type link struct{
+var MaxDepth = 2
+
+type Link struct{
 	url string
 	text string
 	depth int
@@ -21,7 +23,7 @@ type HttpError struct {
 	original string
 }
 
-func LinkReader(resp *http.Response, depth int) []link {
+func LinkReader(resp *http.Response, depth int) []Link {
 	page := html.NewTokenizer(resp.Body)
 	links := []Link{}
 
@@ -75,4 +77,71 @@ func NewLink(tag html.Token, text string, depth int) Link  {
 			link.url = strings.TrimSpace(tag.Attr[i].Val)
 		}
 	}
+	return link
+}
+
+func (self Link) String() string {
+	spacer := strings.Repeat("\t", self.depth)
+	return fmt.Sprintf("%s%s (%d) - %s", spacer, self.text, self.depth, self.url)
+}
+
+func (self Link) Valid() bool {
+	if self.depth >= MaxDepth {
+		return false
+	}
+	if len(self.text) == 0 {
+		return false
+	}
+	if len(self.url) == 0 || strings.Contains(strings.ToLower(self.url), "javascript"){
+		return false
+	}
+	return true
+}
+
+func (self HttpError) Error() string {
+	return self.original
+}
+
+func recurDownloader(url string, depth int) {
+	page, err := downloader(url)
+	if err != nil {
+		log.Error(err)
+		return
+	}
+	links := LinkReader(page, depth)
+
+	for _,link := range links {
+		fmt.Println(link)
+		if depth+1 < MaxDepth {
+			recurDownloader(link.url, depth+1)
+		}
+	}
+}
+
+func downloader(url string)(resp *http.Response, err error)  {
+	log.Debugf("Downloading %s", url)
+	resp, err = http.Get(url)
+	if err != nil {
+		log.Debugf("Error: %s", url)
+		return
+	}
+
+	if resp.StatusCode > 299 {
+		err = HttpError{fmt.Sprintf("Error (%d): %s", resp.StatusCode, url)}
+		return
+	}
+	return
+}
+
+func main() {
+	log.SetPriorityString("info")
+	log.SetPrefix("crawler")
+
+	log.Debug(os.Args)
+
+	if len(os.Args) < 2 {
+		log.Fatalln("Missing Url arg")
+	}
+
+	recurDownloader(os.Args[1], 0)
 }
